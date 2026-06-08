@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const BASE = import.meta.env.DEV
-  ? '/astro-api/v1'
-  : 'https://json.astrologyapi.com/v1';
+const BASE = '/astro-api/v1';
 
 function getHeaders(apiKey) {
   let lang = 'en';

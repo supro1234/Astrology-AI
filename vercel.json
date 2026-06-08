@@ -40,6 +40,10 @@
   ],
   "rewrites": [
     {
+      "source": "/astro-api/(.*)",
+      "destination": "https://json.astrologyapi.com/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
