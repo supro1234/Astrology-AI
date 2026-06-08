@@ -78,7 +78,7 @@ graph TD
    * Explore the various tools like Birth Charts, Horoscope, Panchang, and the Insights Chat feature!
 
 ## 🌐 Online Deploy Link
-> **Deployment Status:** Pending  
+> **Deployment Status:** Done ✔️ 
 > **Link:** https://astrology-ai-two.vercel.app/
 
 ## 🔒 Security & Reliability
