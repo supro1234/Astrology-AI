@@ -20,7 +20,7 @@ function formatTime() {
 const WELCOME_MSG = {
   id: 0,
   isUser: false,
-  text: '🔮 Namaste! I am VedaGuru, your Vedic AI Astrologer. I can reveal insights about your birth chart, planetary positions, dasha periods, and life predictions. What would you like to know?',
+  text: '🔮 Namaste! I am VedaGuru, your Vedic Astrological Guide. I can reveal insights about your birth chart, planetary positions, dasha periods, and life predictions. What would you like to know?',
   time: formatTime(),
 };
 
@@ -103,7 +103,7 @@ export default function Chat() {
       const userMsg = { id: Date.now(), isUser: true, text: text.trim(), time: formatTime() };
       setMessages((m) => [...m, userMsg]);
       setInput('');
-      addAiMessage('⚠️ Please verify your API key in Settings before using the AI chat. Navigate to Settings → re-enter your Access Token → Verify & Save.');
+      addAiMessage('⚠️ Please verify your API key in Settings before using the chat. Navigate to Settings → re-enter your Access Token → Verify & Save.');
       return;
     }
 
@@ -179,7 +179,7 @@ export default function Chat() {
               <span style={{ fontSize: '1.5rem' }}>🔮</span>
               <div>
                 <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: '1rem' }}>
-                  VedaGuru — Vedic AI Astrologer
+                  VedaGuru — Vedic Astrological Guide
                 </div>
                 <div style={{ fontSize: '0.75rem', color: hasApiKey && hasBirthData ? '#4ade80' : '#f87171' }}>
                   {hasApiKey && hasBirthData ? '● Online' : hasApiKey ? '● Birth data needed' : '● API key needed'}
@@ -237,7 +237,7 @@ export default function Chat() {
           {!hasApiKey && (
             <ErrorBanner
               title="API Key Missing"
-              detail="Please verify your AstrologyAPI Access Token in Settings to enable AI predictions."
+              detail="Please verify your AstrologyAPI Access Token in Settings to enable predictions."
               actionLabel="Go to Settings"
               onAction={() => navigate('/settings')}
             />

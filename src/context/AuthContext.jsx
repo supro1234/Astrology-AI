@@ -4,7 +4,10 @@ import { storage, KEYS } from '../utils/storage';
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [credentials, setCredentials] = useState(() => storage.getCredentials());
+  const [credentials, setCredentials] = useState(() => ({
+    userId: storage.get(KEYS.USER_ID),
+    apiKey: null, // Never read from localStorage
+  }));
 
   const login = (userId, apiKey) => {
     storage.setCredentials(userId, apiKey);

@@ -34,11 +34,11 @@ export const storage = {
   },
   getCredentials: () => ({
     userId: storage.get(KEYS.USER_ID),
-    apiKey: storage.get(KEYS.API_KEY),
+    apiKey: null, // strictly in-memory now
   }),
   setCredentials: (userId, apiKey) => {
     storage.set(KEYS.USER_ID, userId);
-    storage.set(KEYS.API_KEY, apiKey);
+    // intentionally NOT saving apiKey to localStorage
   },
   getBirthData: () => storage.get(KEYS.BIRTH),
   setBirthData: (data) => storage.set(KEYS.BIRTH, data),

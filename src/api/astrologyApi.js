@@ -19,16 +19,26 @@ function getHeaders(apiKey) {
 }
 
 function getBirthBody(birthData) {
-  return {
-    day: Number(birthData.day),
-    month: Number(birthData.month),
-    year: Number(birthData.year),
-    hour: Number(birthData.hour),
-    min: Number(birthData.min),
-    lat: parseFloat(birthData.lat),
-    lon: parseFloat(birthData.lon),
-    tzone: parseFloat(birthData.tzone),
-  };
+  const day = Number(birthData.day);
+  const month = Number(birthData.month);
+  const year = Number(birthData.year);
+  const hour = Number(birthData.hour);
+  const min = Number(birthData.min);
+  const lat = parseFloat(birthData.lat);
+  const lon = parseFloat(birthData.lon);
+  const tzone = parseFloat(birthData.tzone);
+
+  // Strict input sanitization and validation
+  if (isNaN(day) || day < 1 || day > 31) throw new Error('Invalid day');
+  if (isNaN(month) || month < 1 || month > 12) throw new Error('Invalid month');
+  if (isNaN(year) || year < 1000 || year > 3000) throw new Error('Invalid year');
+  if (isNaN(hour) || hour < 0 || hour > 23) throw new Error('Invalid hour');
+  if (isNaN(min) || min < 0 || min > 59) throw new Error('Invalid minute');
+  if (isNaN(lat) || lat < -90 || lat > 90) throw new Error('Invalid latitude');
+  if (isNaN(lon) || lon < -180 || lon > 180) throw new Error('Invalid longitude');
+  if (isNaN(tzone) || tzone < -12 || tzone > 14) throw new Error('Invalid timezone');
+
+  return { day, month, year, hour, min, lat, lon, tzone };
 }
 
 async function callApi(endpoint, body, credentials) {
@@ -116,6 +126,11 @@ export async function getPanchang(date, lat, lon, tzone, credentials) {
 
 // ─── Kundli Match ────────────────────────────────────────────
 export async function getMatchMaking(person1, person2, credentials) {
+  // Validate person 1
+  getBirthBody(person1);
+  // Validate person 2
+  getBirthBody(person2);
+
   const body = {
     m_day: Number(person1.day), m_month: Number(person1.month), m_year: Number(person1.year),
     m_hour: Number(person1.hour), m_min: Number(person1.min),
