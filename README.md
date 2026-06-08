@@ -83,6 +83,10 @@ VedAstro is built with a security-first approach to protect user credentials and
 
 * **In-Memory Credentials:** The API Key is **never** saved to `localStorage` or any persistent client-side storage. It is held securely in React Context memory. If the page is refreshed or closed, the key is wiped, preventing cross-site scripting (XSS) or extensions from scraping persistent tokens.
 * **Strict Input Sanitization:** All birth chart and matching inputs are strictly validated and parsed (checking boundaries for latitude, longitude, dates, and times) before any API requests are formulated. This prevents malicious injection and malformed requests.
+* **Client-Side Quota Protection:** Because the API Key is provided by the individual user and held securely in their local memory, the application is immune to global quota exhaustion attacks. An attacker attempting to spam requests will only deplete their own personal AstrologyAPI quota.
+* **React Native XSS Protection:** All user inputs and chat outputs are natively escaped by React's DOM rendering engine. We strictly avoid `dangerouslySetInnerHTML`, ensuring that even if malicious code is returned by an API or entered by a user, it cannot execute.
+* **CORS Architecture:** Cross-Origin Resource Sharing (CORS) is handled directly by `json.astrologyapi.com`, which natively allows cross-origin requests from our verified client. This eliminates the need for a complex local proxy while keeping requests secure.
+* **Strict Dependency Locking:** All third-party dependencies in `package.json` (including Three.js, Axios, and Framer Motion) are locked to exact, verified versions to prevent supply-chain attacks from rogue sub-version updates.
 * **Network-Level Security (Vercel Edge):** We configured `vercel.json` to enforce strict security headers, acting as a cloud-level Helmet protection:
   * **Content-Security-Policy (CSP):** A highly precise CSP explicitly whitelists only `json.astrologyapi.com`, `fonts.googleapis.com`, and `fonts.gstatic.com`. All unauthorized connections are blocked.
   * **Strict-Transport-Security (HSTS):** Enforces HTTPS connections across the board.
