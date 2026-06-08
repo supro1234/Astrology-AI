@@ -1,12 +1,15 @@
 # 🪐 VedAstro - Ancient Wisdom. Digital Precision.
 
-![VedAstro UI Showcase](https://via.placeholder.com/1200x600.png?text=VedAstro+UI+Showcase:+3D+Background,+Birth+Chart,+Astrology+Chat)
+
 
 ## 📝 Summary
 VedAstro is a modern, responsive, and secure web application that brings ancient Vedic Astrology into the digital era. Powered by AstrologyAPI.com, the platform offers users a comprehensive suite of astrological tools, including birth charts, horoscope analysis, daily panchang, numerology, Kundli matching, and a unique Astrological Insights Chat guide.
 
 ## 📸 Screenshots
-*(To be added by maintainer)*
+<img width="1918" height="923" alt="image" src="https://github.com/user-attachments/assets/f029f0ba-8b7a-4dc7-a0b5-b0db62084f88" />
+<img width="1906" height="889" alt="image" src="https://github.com/user-attachments/assets/b1c0689d-7ca5-4e15-a715-4c6808dea63d" />
+<img width="1918" height="936" alt="image" src="https://github.com/user-attachments/assets/81af364d-0220-4ff4-beac-0669a2fa7fd6" />
+
 1. **The 3D Background & Dashboard** - Glassmorphism UI over an interactive starfield.
 2. **Birth Chart View** - Detailed planetary position tables and North/South Indian charts.
 3. **Astrological Insights Chat** - Interactive chat interface for parsing astrological data.
