@@ -79,7 +79,7 @@ graph TD
 
 ## 🌐 Online Deploy Link
 > **Deployment Status:** Pending  
-> **Link:** `[Link to be added here upon Vercel deployment]`
+> **Link:** https://astrology-ai-two.vercel.app/
 
 ## 🔒 Security & Reliability
 VedAstro is built with a security-first approach to protect user credentials and ensure that the application is resistant to common web exploitation vulnerabilities.
