@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../store/useAppStore';
 
-import Welcome from '../pages/Welcome';
-import Setup from '../pages/Setup';
-import Home from '../pages/Home';
-import BirthChart from '../pages/BirthChart';
-import Horoscope from '../pages/Horoscope';
-import Panchang from '../pages/Panchang';
-import Numerology from '../pages/Numerology';
-import Kundali from '../pages/Kundali';
-import Match from '../pages/Match';
-import Chat from '../pages/Chat';
-import Settings from '../pages/Settings';
+const Welcome = lazy(() => import('../pages/Welcome'));
+const Setup = lazy(() => import('../pages/Setup'));
+const Home = lazy(() => import('../pages/Home'));
+const BirthChart = lazy(() => import('../pages/BirthChart'));
+const Horoscope = lazy(() => import('../pages/Horoscope'));
+const Panchang = lazy(() => import('../pages/Panchang'));
+const Numerology = lazy(() => import('../pages/Numerology'));
+const Kundali = lazy(() => import('../pages/Kundali'));
+const Match = lazy(() => import('../pages/Match'));
+const Chat = lazy(() => import('../pages/Chat'));
+const Settings = lazy(() => import('../pages/Settings'));
 
 // ─── Page Transition Wrapper ──────────────────────────────────
 const pageVariants = {
@@ -37,7 +37,13 @@ function PageTransition({ children }) {
       transition={pageTransition}
       style={{ width: '100%', minHeight: '100vh' }}
     >
-      {children}
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-screen text-amber-500">
+          Loading...
+        </div>
+      }>
+        {children}
+      </Suspense>
     </motion.div>
   );
 }

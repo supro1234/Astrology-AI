@@ -77,6 +77,13 @@ graph TD
 * **Rich Chat UI (`ChatBubble.jsx`):** Parses and formats LLM Markdown natively (bolding, paragraphs) for a clean reading experience, while strictly sanitizing outputs to prevent Cross-Site Scripting (XSS).
 * **API Edge Proxying:** External APIs (like OpenRouter) are securely proxied through Vercel's Edge Network (`/openrouter-api`), avoiding CORS limitations and hiding direct external communication.
 
+### 🚀 Performance & Quality Enhancements (Latest)
+* **Performance Optimization:** Pages and heavy 3D Three.js components are now dynamically code-split using `React.lazy()` and `<Suspense>`, reducing initial load times. Images and SVGs are automatically optimized to WebP/Avif using `vite-plugin-image-optimizer`.
+* **State Management (Zustand):** Replaced React Context API wrappers with a unified, lightweight `useAppStore` (Zustand) for Auth, Theme, and Language, resolving infinite re-render loops and improving state access ergonomics via `useShallow`.
+* **Robust Error Handling:** Integrated `@sentry/react` for real-time error tracking and session replays, alongside a beautifully styled fallback `<GlobalErrorBoundary>`.
+* **Comprehensive Testing:** Configured `Vitest` and `React Testing Library` for unit testing (with fully mocked stores), and added `Cypress` for end-to-end (E2E) testing.
+* **Accessibility (a11y):** Added `eslint-plugin-jsx-a11y` to enforce ARIA rules and semantic HTML standards during development.
+
 ## 📋 Prerequisites
 * **Node.js** (v18.0.0 or higher recommended)
 * An active **AstrologyAPI.com** User ID & API Key.

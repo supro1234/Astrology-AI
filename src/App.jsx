@@ -1,13 +1,14 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import AppRouter from './router/AppRouter';
-import BackgroundScene from './components/three/BackgroundScene';
-import CursorTrail from './components/ui/CursorTrail';
-import FloatingSymbols from './components/ui/FloatingSymbols';
+
+const BackgroundScene = lazy(() => import('./components/three/BackgroundScene'));
+const CursorTrail = lazy(() => import('./components/ui/CursorTrail'));
+const FloatingSymbols = lazy(() => import('./components/ui/FloatingSymbols'));
 
 export default function App() {
   return (
@@ -21,10 +22,14 @@ export default function App() {
             </Suspense>
 
             {/* ── Floating zodiac symbols — behind content, above canvas ── */}
-            <FloatingSymbols />
+            <Suspense fallback={null}>
+              <FloatingSymbols />
+            </Suspense>
 
             {/* ── Golden cursor trail — above everything ── */}
-            <CursorTrail />
+            <Suspense fallback={null}>
+              <CursorTrail />
+            </Suspense>
 
             {/* ── Page routes with transitions ── */}
             <AppRouter />

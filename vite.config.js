@@ -1,11 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    ViteImageOptimizer({
+      test: /\.(jpe?g|png|gif|tiff|webp|svg|avif)$/i,
+      includePublic: true,
+      logStats: true,
+      ansiColors: true,
+      webp: {
+        quality: 80,
+        effort: 6,
+      },
+      png: { quality: 80 },
+      jpeg: { quality: 80 },
+      jpg: { quality: 80 },
+    }),
   ],
 
   // ─── Dev Server + API Proxy ──────────────────────────────
