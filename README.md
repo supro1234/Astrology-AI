@@ -68,6 +68,7 @@ graph TD
     
     %% Deployment
     Host[Vercel CDN] --> |Serves| Frontend
+```
 
 ## ✨ New Features & Improved Components
 
