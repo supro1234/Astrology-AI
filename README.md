@@ -42,6 +42,32 @@ vedastroapp/
 ├── vercel.json             # Vercel deployment, edge security headers, and proxies
 └── vite.config.js          # Vite build config & local development proxies
 ```
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    %% User Interaction
+    User((User)) --> |Interacts via Browser| UI[React UI / Components]
+    
+    %% Frontend Core
+    subgraph Frontend [VedAstro Client]
+        UI --> Router[React Router]
+        Router --> Context[Context API: Auth/Theme/Lang]
+        Context --> Pages[App Pages: Horoscope, Match, Chat, etc.]
+        Pages --> APIClient[Axios API Client]
+    end
+    
+    %% Security Layer
+    subgraph SecurityLayer [Vercel Edge & Helmet-Equivalent Security]
+        SecHeaders[Strict CSP, HSTS, X-Frame-Options, NoSniff]
+    end
+    
+    %% API Requests
+    Frontend -- HTTP/HTTPS --> SecurityLayer
+    SecurityLayer -- Secure API Calls --> ExtAPI[AstrologyAPI.com]
+    
+    %% Deployment
+    Host[Vercel CDN] --> |Serves| Frontend
 
 ## ✨ New Features & Improved Components
 
