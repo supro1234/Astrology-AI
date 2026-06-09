@@ -1,61 +1,57 @@
 # 🪐 VedAstro - Ancient Wisdom. Digital Precision.
 
-
-
 ## 📝 Summary
-VedAstro is a modern, responsive, and secure web application that brings ancient Vedic Astrology into the digital era. Powered by AstrologyAPI.com, the platform offers users a comprehensive suite of astrological tools, including birth charts, horoscope analysis, daily panchang, numerology, Kundli matching, and a unique Astrological Insights Chat guide.
+VedAstro is a modern, responsive, and highly secure web application that brings ancient Vedic Astrology into the digital era. Powered by AstrologyAPI.com for precise astrological calculations and OpenRouter (Claude/Gemini) for a true AI Astrologer experience, the platform offers a comprehensive suite of tools including birth charts, horoscope analysis, daily panchang, numerology, Kundli matching, and a streaming AI guide.
 
 ## 📸 Screenshots
-<img width="1918" height="923" alt="image" src="https://github.com/user-attachments/assets/f029f0ba-8b7a-4dc7-a0b5-b0db62084f88" />
-<img width="1906" height="889" alt="image" src="https://github.com/user-attachments/assets/b1c0689d-7ca5-4e15-a715-4c6808dea63d" />
-<img width="1918" height="936" alt="image" src="https://github.com/user-attachments/assets/81af364d-0220-4ff4-beac-0669a2fa7fd6" />
-
-1. **The 3D Background & Dashboard** - Glassmorphism UI over an interactive starfield.
-2. **Birth Chart View** - Detailed planetary position tables and North/South Indian charts.
-3. **Astrological Insights Chat** - Interactive chat interface for parsing astrological data.
+*(Add your screenshots here)*
 
 ## 🛠️ Technical Stack
-* **Frontend:** React 19, Vite
+* **Frontend:** React 19, Vite 5
 * **Styling:** Tailwind CSS, Framer Motion (for smooth animations)
 * **3D/Graphics:** Three.js, React Three Fiber (for immersive backgrounds)
+* **AI & LLM:** OpenRouter API (Claude 3.5 Sonnet, Gemini Flash) with real-time streaming
+* **Geolocation:** OpenStreetMap (Nominatim), TimeAPI for automatic GPS & Timezone detection
 * **Routing:** React Router DOM
 * **State/Context:** React Context API (Auth, Theme, Language)
-* **API Integration:** Axios (AstrologyAPI.com)
-* **Deployment & Security:** Vercel (Edge-level security headers)
+* **Deployment & Security:** Vercel (Edge-level security headers, API rewrites)
+
+## 📁 Folder Structure
+
+```text
+vedastroapp/
+├── public/                 # Static assets (Favicon)
+├── src/
+│   ├── api/                # API communication layers
+│   │   ├── astrologyApi.js # Vedic Astrology data endpoints
+│   │   └── vedaGuruAI.js   # OpenRouter LLM streaming integration for VedaGuru
+│   ├── components/
+│   │   ├── cards/          # Reusable data display (PlanetCard, SignCard, DashaTimeline)
+│   │   ├── chat/           # Chat UI, Typing Indicators, and XSS-sanitized ChatBubbles
+│   │   ├── layout/         # App shell (Navbar, Sidebar, BottomNav)
+│   │   └── ui/             # Smart components (CitySearch with GPS, GlassCards, etc.)
+│   ├── context/            # Global State (AuthContext, LanguageContext)
+│   ├── pages/              # Main screens (Home, BirthChart, Horoscope, Match, Chat)
+│   ├── router/             # React Router configuration (AppRouter)
+│   ├── utils/              # Core logic (dashaCalculator, docxGenerator, storage)
+│   ├── App.jsx             # Root application component
+│   └── main.jsx            # React DOM mounting point
+├── package.json            # Strict dependencies list
+├── vercel.json             # Vercel deployment, edge security headers, and proxies
+└── vite.config.js          # Vite build config & local development proxies
+```
+
+## ✨ New Features & Improved Components
+
+* **True AI Astrologer (`vedaGuruAI.js`):** Migrated from basic static keyword templates to a live, streaming LLM agent powered by OpenRouter. It dynamically parses the user's birth chart and planetary alignments to provide highly analytical, direct, and straightforward life predictions.
+* **Smart City & GPS Search (`CitySearch.jsx`):** A unified location component that automatically fetches Latitude, Longitude, Area Pincodes, and calculates accurate Timezone offsets using `Nominatim` and `TimeAPI`. Features a one-click "Use GPS" button.
+* **Rich Chat UI (`ChatBubble.jsx`):** Parses and formats LLM Markdown natively (bolding, paragraphs) for a clean reading experience, while strictly sanitizing outputs to prevent Cross-Site Scripting (XSS).
+* **API Edge Proxying:** External APIs (like OpenRouter) are securely proxied through Vercel's Edge Network (`/openrouter-api`), avoiding CORS limitations and hiding direct external communication.
 
 ## 📋 Prerequisites
-Before you begin, ensure you have met the following requirements:
 * **Node.js** (v18.0.0 or higher recommended)
-* **npm**, **yarn**, or **pnpm** package manager
-* An active **API Key** (Access Token) from [AstrologyAPI.com](https://astrologyapi.com)
-
-## 🏗️ System Architecture
-
-```mermaid
-graph TD
-    %% User Interaction
-    User((User)) --> |Interacts via Browser| UI[React UI / Components]
-    
-    %% Frontend Core
-    subgraph Frontend [VedAstro Client]
-        UI --> Router[React Router]
-        Router --> Context[Context API: Auth/Theme/Lang]
-        Context --> Pages[App Pages: Horoscope, Match, Chat, etc.]
-        Pages --> APIClient[Axios API Client]
-    end
-    
-    %% Security Layer
-    subgraph SecurityLayer [Vercel Edge & Helmet-Equivalent Security]
-        SecHeaders[Strict CSP, HSTS, X-Frame-Options, NoSniff]
-    end
-    
-    %% API Requests
-    Frontend -- HTTP/HTTPS --> SecurityLayer
-    SecurityLayer -- Secure API Calls --> ExtAPI[AstrologyAPI.com]
-    
-    %% Deployment
-    Host[Vercel CDN] --> |Serves| Frontend
-```
+* An active **AstrologyAPI.com** User ID & API Key.
+* An active **OpenRouter** API Key for the VedaGuru AI Chat.
 
 ## 🚀 Use Process
 1. **Clone the repository:**
@@ -65,40 +61,34 @@ graph TD
    ```
 2. **Install dependencies:**
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 3. **Run the development server:**
    ```bash
    npm run dev
    ```
-4. **Usage within the App:**
+4. **Usage:**
    * Open your browser to `http://localhost:5173`.
-   * Click **Get Started** on the welcome page.
-   * Enter your `AstrologyAPI` Access Token on the Setup page. (This is stored strictly in memory and will be cleared when you close the tab).
-   * Explore the various tools like Birth Charts, Horoscope, Panchang, and the Insights Chat feature!
+   * On the Setup page, enter your `AstrologyAPI` Key and `OpenRouter` Key.
+   * Enter your Birth details using the smart City Search autocomplete.
+   * Explore your Horoscope and chat with the AI VedaGuru!
 
-## 🌐 Online Deploy Link
-> **Deployment Status:** Done ✔️ 
-> **Link:** https://astrology-ai-two.vercel.app/
+## 🔒 Security & Reliability (Helmet Equivalent)
 
-## 🔒 Security & Reliability
-VedAstro is built with a security-first approach to protect user credentials and ensure that the application is resistant to common web exploitation vulnerabilities.
+VedAstro is built with a defense-in-depth, security-first approach to protect user credentials and ensure resilience against modern web exploitation.
 
-* **In-Memory Credentials:** The API Key is **never** saved to `localStorage` or any persistent client-side storage. It is held securely in React Context memory. If the page is refreshed or closed, the key is wiped, preventing cross-site scripting (XSS) or extensions from scraping persistent tokens.
-* **Strict Input Sanitization:** All birth chart and matching inputs are strictly validated and parsed (checking boundaries for latitude, longitude, dates, and times) before any API requests are formulated. This prevents malicious injection and malformed requests.
-* **Client-Side Quota Protection:** Because the API Key is provided by the individual user and held securely in their local memory, the application is immune to global quota exhaustion attacks. An attacker attempting to spam requests will only deplete their own personal AstrologyAPI quota.
-* **React Native XSS Protection:** All user inputs and chat outputs are natively escaped by React's DOM rendering engine. We strictly avoid `dangerouslySetInnerHTML`, ensuring that even if malicious code is returned by an API or entered by a user, it cannot execute.
-* **CORS Architecture:** Cross-Origin Resource Sharing (CORS) is handled directly by `json.astrologyapi.com`, which natively allows cross-origin requests from our verified client. This eliminates the need for a complex local proxy while keeping requests secure.
-* **Strict Dependency Locking:** All third-party dependencies in `package.json` (including Three.js, Axios, and Framer Motion) are locked to exact, verified versions to prevent supply-chain attacks from rogue sub-version updates.
-* **Network-Level Security (Vercel Edge):** We configured `vercel.json` to enforce strict security headers, acting as a cloud-level Helmet protection:
-  * **Content-Security-Policy (CSP):** A highly precise CSP explicitly whitelists only `json.astrologyapi.com`, `fonts.googleapis.com`, and `fonts.gstatic.com`. All unauthorized connections are blocked.
-  * **Strict-Transport-Security (HSTS):** Enforces HTTPS connections across the board.
-  * **X-Frame-Options:** Set to `DENY` to completely eliminate Clickjacking vulnerabilities.
-* **Document-Level Fallback:** The `index.html` file includes Helmet-equivalent meta tags as a secondary layer of defense natively in the browser.
-* **Comprehensive Error Handling:** API failures, rate limits, and network aborts are elegantly caught and presented via UI banners and toasts, preventing silent failures and raw error leakage.
+* **In-Memory Credentials:** API Keys are strictly stored in React Context memory or `localStorage`. We do not have a centralized backend database that can be breached to steal user API keys.
+* **Vercel Edge Security Headers (Helmet Equivalent):** We configured `vercel.json` to enforce strict security headers, acting as a cloud-level Helmet protection directly at Vercel's edge network:
+  * **Content-Security-Policy (CSP):** Highly precise CSP explicitly whitelists only our required endpoints (`astrologyapi.com`, `openrouter.ai`, `nominatim.openstreetmap.org`, `timeapi.io`). Unauthorized connections are blocked.
+  * **Strict-Transport-Security (HSTS):** Enforces HTTPS connections globally.
+  * **X-Frame-Options (`DENY`):** Completely eliminates Clickjacking vulnerabilities.
+  * **Permissions-Policy:** Strict restrictions on device sensors while explicitly allowing `geolocation=(self)` for our GPS button.
+* **Bulletproof XSS Protection:** To safely render the AI's markdown formatting, we use `dangerouslySetInnerHTML` in `ChatBubble.jsx`. However, **all HTML brackets (`<`, `>`) and entities are explicitly escaped and sanitized** before Markdown is processed. This guarantees that neither an LLM hallucination nor a user injection can execute `<script>` tags or malicious DOM events.
+* **Edge Proxying:** OpenRouter calls are proxied via Vercel Rewrites (`/openrouter-api`), maintaining a clean origin policy and preventing API exposure errors.
+* **Client-Side Quota Protection:** Because API Keys are provided by the individual user, the application is immune to global quota exhaustion attacks. An attacker can only deplete their own personal quota.
 
 ## 🌍 Internationalization (i18n)
-VedAstro features a custom, lightweight multi-language implementation via React Context (`LanguageContext.jsx`), dynamically adapting content for English, Hindi, and Bengali users without the bloat of external i18n libraries.
+VedAstro features a custom, lightweight multi-language implementation (`LanguageContext.jsx`), dynamically adapting content and LLM system prompts for English, Hindi, and Bengali users.
 
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
