@@ -4,7 +4,9 @@
 VedAstro is a modern, responsive, and highly secure web application that brings ancient Vedic Astrology into the digital era. Powered by AstrologyAPI.com for precise astrological calculations and OpenRouter (Claude/Gemini) for a true AI Astrologer experience, the platform offers a comprehensive suite of tools including birth charts, horoscope analysis, daily panchang, numerology, Kundli matching, and a streaming AI guide.
 
 ## 📸 Screenshots
-*(Add your screenshots here)*
+<img width="1918" height="902" alt="image" src="https://github.com/user-attachments/assets/515f7a86-bcc4-4c1d-8215-b67934e7e318" />
+<img width="1919" height="899" alt="image" src="https://github.com/user-attachments/assets/adfeb506-14bb-450e-8418-e30a5cf95c64" />
+<img width="1901" height="900" alt="image" src="https://github.com/user-attachments/assets/7afc5e33-1670-409e-9967-e5e2640f4507" />
 
 ## 🛠️ Technical Stack
 * **Frontend:** React 19, Vite 5
