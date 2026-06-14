@@ -5,10 +5,21 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import AppRouter from './router/AppRouter';
+import SecurityWarning from './components/ui/SecurityWarning';
+import { useScreenshotBlocker } from './hooks/useScreenshotBlocker';
+import { useTabGuard } from './hooks/useTabGuard';
+import { useAuth } from './context/AuthContext';
 
 const BackgroundScene = lazy(() => import('./components/three/BackgroundScene'));
 const CursorTrail = lazy(() => import('./components/ui/CursorTrail'));
 const FloatingSymbols = lazy(() => import('./components/ui/FloatingSymbols'));
+
+function SecurityLayer() {
+  const { isAuthenticated } = useAuth();
+  useScreenshotBlocker(true);
+  useTabGuard(isAuthenticated);
+  return <SecurityWarning />;
+}
 
 export default function App() {
   return (
@@ -16,6 +27,7 @@ export default function App() {
       <AuthProvider>
         <ThemeProvider>
           <LanguageProvider>
+            <SecurityLayer />
             {/* ── Global 3D Background — persists across all routes ── */}
             <Suspense fallback={null}>
               <BackgroundScene />

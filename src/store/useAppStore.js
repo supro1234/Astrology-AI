@@ -40,6 +40,18 @@ const createAuthSlice = (set) => ({
       isAuthenticated: false,
     });
   },
+
+  instantLogout: () => {
+    // Wipe API keys instantly but keep birth data
+    storage.remove(KEYS.API_KEY);
+    set((state) => ({
+      credentials: { ...state.credentials, apiKey: null, openRouterKey: null },
+      isAuthenticated: false,
+    }));
+  },
+
+  securityViolation: null,
+  setSecurityViolation: (reason) => set({ securityViolation: reason }),
 });
 
 // ─── Theme Slice ──────────────────────────────────────────────────────────────
@@ -118,6 +130,7 @@ export const useAuth = () =>
       isAuthenticated: s.isAuthenticated,
       login: s.login,
       logout: s.logout,
+      instantLogout: s.instantLogout,
       setOpenRouterKey: s.setOpenRouterKey,
     }))
   );

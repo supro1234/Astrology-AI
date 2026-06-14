@@ -220,9 +220,26 @@ export default function Home() {
             }}>
               {t('namaste')}{birthData?.name ? `, ${birthData.name}` : ''} 🙏
             </h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              {formatDate()} • {t('home')}
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0 }}>
+                {formatDate()} • {t('home')}
+              </p>
+              <div style={{
+                background: 'rgba(74,222,128,0.1)',
+                border: '1px solid rgba(74,222,128,0.3)',
+                borderRadius: '999px',
+                padding: '0.15rem 0.6rem',
+                color: '#4ade80',
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                letterSpacing: '0.02em',
+              }}>
+                <span style={{ fontSize: '0.7rem' }}>🔒</span> Protected Session
+              </div>
+            </div>
           </motion.div>
 
           {/* No birth data banner */}

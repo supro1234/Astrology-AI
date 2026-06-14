@@ -343,8 +343,11 @@ export default function Setup() {
             <LanguagePicker />
             <ThemeToggle size="sm" />
           </div>
-          <p style={{ textAlign: 'center', fontSize: '0.7rem', color: 'var(--text-muted)', opacity: 0.6 }}>
+          <p style={{ textAlign: 'center', fontSize: '0.7rem', color: 'var(--text-muted)', opacity: 0.6, marginBottom: '0.5rem' }}>
             🔒 Credentials stored in your browser only. Never sent to any third-party server.
+          </p>
+          <p style={{ textAlign: 'center', fontSize: '0.7rem', color: '#f87171', opacity: 0.9 }}>
+            🛡️ Strict Security Active: Screenshots and tab-switching will instantly terminate your session.
           </p>
         </div>
       </motion.div>

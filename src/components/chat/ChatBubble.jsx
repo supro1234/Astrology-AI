@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 
 export default function ChatBubble({ message, isUser }) {
   return (
@@ -44,16 +46,9 @@ export default function ChatBubble({ message, isUser }) {
         }}
       >
         <div 
+          className="markdown-body"
           dangerouslySetInnerHTML={{ 
-            __html: message.text
-              .replace(/&/g, '&amp;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-              .replace(/"/g, '&quot;')
-              .replace(/'/g, '&#039;')
-              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-              .replace(/\*(.*?)\*/g, '<em>$1</em>')
-              .replace(/\n/g, '<br />') 
+            __html: useMemo(() => DOMPurify.sanitize(marked.parse(message.text || '', { async: false })), [message.text])
           }} 
         />
         <div style={{
