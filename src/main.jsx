@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 import GlobalErrorBoundary from './components/ui/GlobalErrorBoundary.jsx'
 import { storage } from './utils/storage.js'
+import { checkBan } from './utils/banSystem.js'
 
 // ─── Sentry Initialisation ───────────────────────────────────────────────────
 // Add your DSN to .env as VITE_SENTRY_DSN to enable error reporting in prod.
@@ -44,6 +45,41 @@ const isDark = (() => {
   } catch { return true; }
 })();
 document.documentElement.classList.add(isDark ? 'dark' : 'light');
+
+// ─── Synchronous ban check — prevents any flash of app on banned devices ─────
+// ⚠️ NOTE: localStorage bans can be bypassed by clearing storage.
+// A real production enforcement system needs server-side IP banning.
+(() => {
+  try {
+    const { isBanned } = checkBan();
+    if (isBanned) {
+      // Paint a matching dark screen immediately — React will hydrate BanScreen on top
+      const root = document.getElementById('root');
+      if (root) {
+        root.style.background = '#0A0A1A';
+        root.style.display = 'flex';
+        root.style.alignItems = 'center';
+        root.style.justifyContent = 'center';
+        root.style.minHeight = '100vh';
+        root.innerHTML =
+          '<div style="color:#ef4444;font-family:Inter,sans-serif;font-size:1rem;opacity:0.5;">' +
+          '🔒 Verifying device…</div>';
+      }
+    }
+  } catch { /* ignore — React will handle it */ }
+})();
+
+// ─── Register Security Service Worker as early as possible ─────────────────────
+// The SW stores the ban in CacheStorage which survives localStorage.clear().
+// Registering here (before React) means it will be active on the NEXT page load
+// and can intercept navigation requests before any JS executes.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/security-sw.js', { scope: '/' }).catch(() => {
+      // SW registration failures are non-fatal — React will still enforce the ban
+    });
+  });
+}
 
 // ─── Render ──────────────────────────────────────────────────────────────────
 createRoot(document.getElementById('root')).render(

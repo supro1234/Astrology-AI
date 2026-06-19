@@ -59,6 +59,9 @@ export default defineConfig({
   },
 
   // ─── Build config ────────────────────────────────────────
+  esbuild: {
+    drop: ['console', 'debugger'],
+  },
   build: {
     sourcemap: false,
     rollupOptions: {

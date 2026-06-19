@@ -1,28 +1,37 @@
 /**
  * tabSwitchGuard.js — VedAstro Security Layer
  *
+ * ⚠️  SECURITY NOTE: The device ban triggered here is stored in localStorage
+ *     and can be bypassed by clearing browser storage. A real production system
+ *     needs server-side IP banning + a persistent fingerprint database.
+ *
  * Detects when the user:
  *   • Switches to another tab (document.visibilitychange)
  *   • Switches to another window / app (window.blur)
  *   • Opens browser search: Ctrl+F / Cmd+F / F3 / Cmd+G
  *
- * On detection, fires the onViolation(reason) callback so the caller
- * can wipe API keys, clear state, and redirect to the welcome page.
+ * On detection:
+ *   1. Records the anomaly in the ban system (rolling 5-min window).
+ *   2. If ban threshold reached, calls onBanTriggered(ban) immediately.
+ *   3. Fires onViolation(reason) to wipe keys and redirect as before.
  *
  * Usage:
- *   const cleanup = initTabGuard(onViolation);
+ *   const cleanup = initTabGuard(onViolation, { graceMs: 2000, onBanTriggered });
  *   cleanup(); // removes all listeners
  *
  * @param {'tab_hidden'|'window_blur'|'search_open'} reason
  */
 
-let _visibilityHandler = null;
-let _blurHandler = null;
-let _focusHandler = null;
-let _searchKeyHandler = null;
-let _onViolation = null;
-let _guardActive = false;
-let _obscureOverlay = null;
+import { recordAnomaly } from './banSystem';
+
+let _visibilityHandler  = null;
+let _blurHandler        = null;
+let _focusHandler       = null;
+let _searchKeyHandler   = null;
+let _onViolation        = null;
+let _onBanTriggered     = null;
+let _guardActive        = false;
+let _obscureOverlay     = null;
 const OVERLAY_ID = 'vedastro-security-obscure-overlay';
 
 function showObscureOverlay() {
@@ -57,6 +66,17 @@ function fireViolation(reason) {
   if (!_guardActive) return;
   const elapsed = Date.now() - _startTime;
   if (elapsed < _graceMs) return; // skip during grace period
+
+  // ── Ban system: record anomaly before calling the session violation handler
+  const deviceId = (() => { try { return localStorage.getItem('device_id'); } catch { return null; } })();
+  const banResult = recordAnomaly(deviceId);
+
+  if (banResult.banned && typeof _onBanTriggered === 'function') {
+    _onBanTriggered(banResult.ban);
+    // Don't also fire the normal violation — the ban screen takes over
+    return;
+  }
+
   if (typeof _onViolation === 'function') {
     _onViolation(reason);
   }
@@ -82,13 +102,14 @@ function isSearchCombo(e) {
  * @param {{ graceMs?: number }} options
  * @returns {() => void} cleanup function
  */
-export function initTabGuard(onViolation, { graceMs = 1500 } = {}) {
+export function initTabGuard(onViolation, { graceMs = 1500, onBanTriggered = null } = {}) {
   if (_guardActive) destroyTabGuard();
 
-  _onViolation = onViolation;
-  _guardActive = true;
-  _graceMs = graceMs;
-  _startTime = Date.now();
+  _onViolation    = onViolation;
+  _onBanTriggered = onBanTriggered;
+  _guardActive    = true;
+  _graceMs        = graceMs;
+  _startTime      = Date.now();
 
   // ── 1. Tab visibility change (user switches browser tab) ────────────────────
   _visibilityHandler = () => {
@@ -133,8 +154,9 @@ export function initTabGuard(onViolation, { graceMs = 1500 } = {}) {
  * Stop the guard and remove all listeners.
  */
 export function destroyTabGuard() {
-  _guardActive = false;
-  _onViolation = null;
+  _guardActive    = false;
+  _onViolation    = null;
+  _onBanTriggered = null;
 
   if (_visibilityHandler) {
     document.removeEventListener('visibilitychange', _visibilityHandler);

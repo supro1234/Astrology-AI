@@ -5,12 +5,17 @@ import useAppStore from '../store/useAppStore';
 import { initTabGuard, getViolationMessage } from '../utils/tabSwitchGuard';
 
 /**
+ * useTabGuard.js — VedAstro Security Layer
+ *
  * React hook to enable tab/window/search protection.
- * If a violation occurs, the user is logged out and redirected.
- * 
- * @param {boolean} enabled - Whether the guard should be active
+ * Integrates with the ban system: each violation is recorded,
+ * and if the threshold is reached the onBanTriggered callback is invoked
+ * to immediately switch the UI to the BanScreen without a page reload.
+ *
+ * @param {boolean}  enabled         - Whether the guard should be active
+ * @param {Function} onBanTriggered  - Called with (ban) when device is banned mid-session
  */
-export function useTabGuard(enabled = true) {
+export function useTabGuard(enabled = true, onBanTriggered = null) {
   const { instantLogout } = useAuth();
   const navigate = useNavigate();
 
@@ -39,7 +44,7 @@ export function useTabGuard(enabled = true) {
     };
 
     // Initialize with a 2-second grace period so it doesn't trigger during initial load/animations
-    const cleanup = initTabGuard(onViolation, { graceMs: 2000 });
+    const cleanup = initTabGuard(onViolation, { graceMs: 2000, onBanTriggered });
     return cleanup;
-  }, [enabled, navigate, instantLogout]);
+  }, [enabled, navigate, instantLogout, onBanTriggered]);
 }
