@@ -50,7 +50,7 @@
     "globals": "17.6.0",
     "jsdom": "^29.1.1",
     "sharp": "^0.34.5",
-    "svgo": "^4.0.1",
+    "svgo": "^4.0.2",
     "vite": "^5.0.0",
     "vite-plugin-image-optimizer": "^2.0.3",
     "vitest": "^4.1.8"
