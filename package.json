@@ -49,7 +49,7 @@
     "eslint-plugin-react-refresh": "0.5.2",
     "globals": "17.6.0",
     "jsdom": "^29.1.1",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "svgo": "^4.0.1",
     "vite": "^5.0.0",
     "vite-plugin-image-optimizer": "^2.0.3",
