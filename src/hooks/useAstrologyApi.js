@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { storage } from '../utils/storage';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../store/useAppStore';
 
 export function useAstrologyApi() {
   const { credentials } = useAuth();

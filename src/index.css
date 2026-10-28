@@ -517,3 +517,174 @@ body {
 .planet-saturn { color: #6366f1; border-color: rgba(99, 102, 241, 0.3); }
 .planet-rahu { color: #9CA3AF; border-color: rgba(156, 163, 175, 0.3); }
 .planet-ketu { color: #DC2626; border-color: rgba(220, 38, 38, 0.3); }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VedAstro UI/UX Improvements — Added 2026-10-28
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Enhanced Skeleton Shimmer (animated gold sweep) ────────────────────── */
+@keyframes skeletonShimmer {
+  0%   { background-position: -400% 0; }
+  100% { background-position:  400% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 215, 0, 0.12) 30%,
+    rgba(192, 132, 252, 0.10) 50%,
+    rgba(255, 215, 0, 0.12) 70%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 400% 100%;
+  animation: skeletonShimmer 2s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ─── Glass Card — enhanced inset shine ──────────────────────────────────── */
+.glass-card {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.02) 100%),
+    rgba(13, 13, 38, 0.62);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.14),
+    inset 0 -1px 0 rgba(0,0,0,0.25),
+    inset 1px 0 0 rgba(255,255,255,0.04),
+    0 6px 32px rgba(0,0,0,0.35),
+    0 1px 2px rgba(0,0,0,0.25);
+}
+
+/* ─── Cosmic Loader Spinner ──────────────────────────────────────────────── */
+@keyframes cosmicPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,215,0,0.3), 0 0 12px rgba(255,215,0,0.2); }
+  50%       { box-shadow: 0 0 0 6px rgba(255,215,0,0), 0 0 24px rgba(255,215,0,0.4); }
+}
+
+.cosmic-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255,215,0,0.15);
+  border-top-color: #FFD700;
+  border-right-color: #C084FC;
+  border-radius: 50%;
+  animation: spin 1s linear infinite, cosmicPulse 2s ease-in-out infinite;
+}
+
+/* ─── Focus Ring — accessibility ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(255, 215, 0, 0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── BottomNav — active pill morphing ───────────────────────────────────── */
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+  position: relative;
+  padding: 0.4rem 0;
+  font-size: 0.65rem;
+  background: none;
+  border: none;
+}
+
+.bottom-nav-item.active {
+  color: var(--primary);
+}
+
+.bottom-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+  animation: pillSlideIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pillSlideIn {
+  from { width: 0; opacity: 0; }
+  to   { width: 36px; opacity: 1; }
+}
+
+/* ─── Navbar Scroll Shadow (applied via JS) ──────────────────────────────── */
+.navbar {
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  will-change: background, box-shadow;
+}
+
+/* ─── Smooth Button Focus ────────────────────────────────────────────────── */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(255, 215, 0, 0.8);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ─── Input Focus Enhancement ────────────────────────────────────────────── */
+.input-gold:focus {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px rgba(255, 215, 0, 0.12),
+    0 0 12px rgba(255, 215, 0, 0.08);
+}
+
+/* ─── Mobile: prevent GlassCard tilt overflow ────────────────────────────── */
+@media (max-width: 768px) {
+  .glass-card {
+    /* Tilt effect can cause scroll on mobile — disable perspective */
+    transform: none !important;
+  }
+}
+
+/* ─── Toast Custom Style ─────────────────────────────────────────────────── */
+.go2072408551 {
+  background: rgba(15, 15, 40, 0.95) !important;
+  border: 1px solid rgba(255, 215, 0, 0.25) !important;
+  color: #E2E8F0 !important;
+  backdrop-filter: blur(16px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 16px rgba(255,215,0,0.1) !important;
+}
+
+/* ─── Accessibility: reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .zodiac-char,
+  .cosmic-spinner,
+  .skeleton,
+  .pulse-glow {
+    animation: none !important;
+  }
+}
+
+/* ─── High contrast mode support ────────────────────────────────────────── */
+@media (forced-colors: active) {
+  .glass-card {
+    border: 1px solid ButtonText;
+  }
+  .btn-gold {
+    background: ButtonText;
+    color: ButtonFace;
+    border: 1px solid ButtonText;
+  }
+}

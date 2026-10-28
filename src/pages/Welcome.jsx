@@ -9,6 +9,14 @@ import Starfield from '../components/ui/Starfield';
 
 const ZODIAC_SIGNS = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
 
+// Pre-computed deterministic animation values (avoids Math.random on each render)
+const ZODIAC_ANIM = ZODIAC_SIGNS.map((_, i) => ({
+  left: `${(i / ZODIAC_SIGNS.length) * 100}%`,
+  duration: `${8 + (i % 5) * 1.6}s`,
+  delay: `${(i * 0.8) % 6}s`,
+  size: `${1.2 + (i % 3) * 0.35}rem`,
+}));
+
 function FloatingZodiac() {
   return (
     <>
@@ -16,11 +24,12 @@ function FloatingZodiac() {
         <span
           key={i}
           className="zodiac-char"
+          aria-hidden="true"
           style={{
-            left: `${(i / ZODIAC_SIGNS.length) * 100}%`,
-            animationDuration: `${8 + Math.random() * 8}s`,
-            animationDelay: `${Math.random() * 6}s`,
-            fontSize: `${1.2 + Math.random() * 1}rem`,
+            left: ZODIAC_ANIM[i].left,
+            animationDuration: ZODIAC_ANIM[i].duration,
+            animationDelay: ZODIAC_ANIM[i].delay,
+            fontSize: ZODIAC_ANIM[i].size,
           }}
         >
           {sign}

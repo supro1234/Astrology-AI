@@ -14,6 +14,57 @@ const Kundali = lazy(() => import('../pages/Kundali'));
 const Match = lazy(() => import('../pages/Match'));
 const Chat = lazy(() => import('../pages/Chat'));
 const Settings = lazy(() => import('../pages/Settings'));
+const PredictionTracker = lazy(() => import('../pages/PredictionTracker'));
+
+// ── Cosmic Loading Spinner ───────────────────────────────────────────────────
+function CosmicLoader() {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center', minHeight: '100vh', gap: '1rem',
+      background: 'var(--bg)',
+    }}>
+      <div style={{
+        width: 48, height: 48,
+        border: '3px solid rgba(255,215,0,0.15)',
+        borderTopColor: '#FFD700',
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite',
+      }} />
+      <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', letterSpacing: '0.1em' }}>
+        Loading…
+      </span>
+    </div>
+  );
+}
+
+// ── 404 Page ──────────────────────────────────────────────────────────────────
+function NotFoundPage() {
+  return (
+    <div style={{
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', gap: '1.5rem',
+      background: 'var(--bg)', color: 'var(--text)',
+    }}>
+      <div style={{ fontFamily: 'Cinzel, serif', fontSize: '6rem', color: '#FFD700', lineHeight: 1 }}>
+        404
+      </div>
+      <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>
+        This cosmic path does not exist.
+      </p>
+      <button
+        onClick={() => window.history.back()}
+        style={{
+          background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.3)',
+          color: '#FFD700', padding: '0.6rem 1.5rem', borderRadius: '50px',
+          cursor: 'pointer', fontFamily: 'Cinzel, serif', fontSize: '0.9rem',
+        }}
+      >
+        ← Return to the Stars
+      </button>
+    </div>
+  );
+}
 
 // ─── Page Transition Wrapper ──────────────────────────────────
 const pageVariants = {
@@ -37,11 +88,7 @@ function PageTransition({ children }) {
       transition={pageTransition}
       style={{ width: '100%', minHeight: '100vh' }}
     >
-      <Suspense fallback={
-        <div className="flex items-center justify-center min-h-screen text-amber-500">
-          Loading...
-        </div>
-      }>
+      <Suspense fallback={<CosmicLoader />}>
         {children}
       </Suspense>
     </motion.div>
@@ -96,9 +143,12 @@ export default function AppRouter() {
         <Route path="/settings" element={
           <ProtectedRoute><PageTransition><Settings /></PageTransition></ProtectedRoute>
         } />
+        <Route path="/predictions" element={
+          <ProtectedRoute><PageTransition><PredictionTracker /></PageTransition></ProtectedRoute>
+        } />
 
-        {/* Catch-all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Catch-all → themed 404 */}
+        <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );

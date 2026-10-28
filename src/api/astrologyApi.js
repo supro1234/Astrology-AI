@@ -1,14 +1,30 @@
 import axios from 'axios';
 import { streamVedaGuruResponse } from './vedaGuruAI';
+import { storage, KEYS } from '../utils/storage';
 
 const BASE = '/astro-api/v1';
 
+// ── Rate-limit guard ─────────────────────────────────────────────────────────
+// Prevents rapid-fire API abuse: max 10 calls per 10-second sliding window.
+const _callTimestamps = [];
+const RATE_LIMIT_WINDOW_MS = 10_000;
+const RATE_LIMIT_MAX_CALLS = 10;
+
+function checkRateLimit() {
+  const now = Date.now();
+  while (_callTimestamps.length && now - _callTimestamps[0] > RATE_LIMIT_WINDOW_MS) {
+    _callTimestamps.shift();
+  }
+  if (_callTimestamps.length >= RATE_LIMIT_MAX_CALLS) {
+    throw new Error('RATE_LIMITED');
+  }
+  _callTimestamps.push(now);
+}
+
 function getHeaders(apiKey) {
-  let lang = 'en';
-  try {
-    const val = localStorage.getItem('vedastro_lang');
-    if (val) lang = val.replace(/['\"]+/g, '');
-  } catch (e) {}
+  // Use storage abstraction — avoids raw localStorage calls scattered in API layer
+  const rawLang = storage.get(KEYS.LANG);
+  const lang = typeof rawLang === 'string' && rawLang.trim() ? rawLang.trim() : 'en';
 
   return {
     'x-astrologyapi-key': apiKey,
@@ -43,6 +59,9 @@ function getBirthBody(birthData) {
 async function callApi(endpoint, body, credentials) {
   const apiKey = credentials?.apiKey;
   if (!apiKey) throw new Error('NO_API_KEY');
+
+  // Client-side rate limiting guard
+  checkRateLimit();
 
   const res = await axios.post(
     BASE + endpoint,
