@@ -1,0 +1,986 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
+@import "tailwindcss";
+
+/* ─── CSS Custom Properties: 3D Watermelon Palette ─────────────────── */
+:root {
+  /* Dark mode: Obsidian Rind & Juicy Ruby Watermelon */
+  --bg: #080D0A;
+  --surface: #0F1712;
+  --surface2: #16241B;
+  --primary: #FF2A5F;           /* Juicy Ruby Watermelon Red/Pink */
+  --primary-hover: #FF4777;
+  --accent: #00E575;            /* Crisp Emerald Living Rind */
+  --accent-hover: #1AEB84;
+  --accent-dark: #008F47;
+  --text: #F3FAF5;
+  --text-muted: #8AA495;
+  --border: rgba(0, 229, 117, 0.22);
+  --border-primary: rgba(255, 42, 95, 0.28);
+  --glow: 0 0 25px rgba(255, 42, 95, 0.45);
+  --glow-accent: 0 0 25px rgba(0, 229, 117, 0.45);
+  --glass-bg: rgba(15, 23, 18, 0.72);
+  --glass-border: rgba(0, 229, 117, 0.18);
+  --depth-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 229, 117, 0.1);
+}
+
+:root.light {
+  /* Light mode: Fresh Melon Mist & Crisp Leaf Greens */
+  --bg: #F8FCFA;
+  --surface: #EEF7F2;
+  --surface2: #E2F1E9;
+  --primary: #E61C53;
+  --primary-hover: #D01546;
+  --accent: #00B359;
+  --accent-hover: #00994C;
+  --accent-dark: #006633;
+  --text: #0E1F15;
+  --text-muted: #527060;
+  --border: rgba(0, 179, 89, 0.25);
+  --border-primary: rgba(230, 28, 83, 0.25);
+  --glow: 0 0 20px rgba(230, 28, 83, 0.35);
+  --glow-accent: 0 0 20px rgba(0, 179, 89, 0.3);
+  --glass-bg: rgba(238, 247, 242, 0.85);
+  --glass-border: rgba(0, 179, 89, 0.2);
+  --depth-shadow: 0 15px 35px rgba(14, 31, 21, 0.08), 0 1px 2px rgba(0, 179, 89, 0.12);
+}
+
+/* ─── Base Styles ────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans Bengali', 'Noto Sans Devanagari', sans-serif;
+  background-color: var(--bg);
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(120,80,255,0.06) 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 20%, rgba(255,215,0,0.04) 0%, transparent 50%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Theme Ripple Animation ─────────────────────────── */
+@keyframes themeRippleExpand {
+  0%   { clip-path: circle(0% at var(--ripple-x, 50%) var(--ripple-y, 50%)); opacity: 1; }
+  100% { clip-path: circle(160% at var(--ripple-x, 50%) var(--ripple-y, 50%)); opacity: 1; }
+}
+
+.theme-ripple {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  animation: themeRippleExpand 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ─── 3D Watermelon Glass Card (Physical Depth & Bevels) ──────────────── */
+.glass-card {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 50%, rgba(0,229,117,0.03) 100%),
+    rgba(15, 23, 18, 0.72);
+  backdrop-filter: blur(32px) saturate(1.8);
+  -webkit-backdrop-filter: blur(32px) saturate(1.8);
+  border: 1px solid;
+  border-color: rgba(0,229,117,0.22) rgba(255,42,95,0.18) rgba(0,229,117,0.08) rgba(0,229,117,0.20);
+  border-radius: 20px;
+  /* Multi-stop 3D lighting: top specular sheen, ambient occlusion, bottom refraction */
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 16px 40px rgba(0,0,0,0.5),
+    0 2px 4px rgba(0,0,0,0.4),
+    0 0 20px rgba(0,229,117,0.05);
+}
+
+.glass-card-hover {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 50%, rgba(0,229,117,0.03) 100%),
+    rgba(15, 23, 18, 0.72);
+  backdrop-filter: blur(32px) saturate(1.8);
+  -webkit-backdrop-filter: blur(32px) saturate(1.8);
+  border: 1px solid;
+  border-color: rgba(0,229,117,0.22) rgba(255,42,95,0.18) rgba(0,229,117,0.08) rgba(0,229,117,0.20);
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 16px 40px rgba(0,0,0,0.5);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(0,229,117,0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 0 0 1px rgba(0,229,117,0.25),
+    0 24px 48px rgba(0,0,0,0.6),
+    0 0 25px rgba(255,42,95,0.25),
+    0 0 15px rgba(0,229,117,0.2);
+  transform: translateY(-3px);
+}
+
+/* ─── 3D Tactile Watermelon Buttons ────────────────────── */
+.btn-gold {
+  /* 3D Ruby Watermelon Button with physical depth extrusion */
+  background: linear-gradient(180deg, #FF3D70 0%, #FF2A5F 50%, #D90040 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(130, 0, 35, 0.6),
+    0 6px 20px rgba(255, 42, 95, 0.45),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.btn-gold:hover {
+  background: linear-gradient(180deg, #FF5280 0%, #FF3D70 50%, #E60045 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(130, 0, 35, 0.7),
+    0 8px 25px rgba(255, 42, 95, 0.6),
+    0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.btn-gold:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(255, 42, 95, 0.3);
+}
+
+.btn-outline-gold {
+  background: rgba(255, 42, 95, 0.08);
+  border: 1.5px solid rgba(255, 42, 95, 0.4);
+  color: #FF5280;
+  border-radius: 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 15px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-outline-gold:hover {
+  background: rgba(255, 42, 95, 0.16);
+  border-color: #FF2A5F;
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(255, 42, 95, 0.4);
+}
+
+/* ─── 3D Emerald Rind Button ───────────────────────────── */
+.btn-emerald {
+  background: linear-gradient(180deg, #1AF082 0%, #00E575 50%, #00B359 100%);
+  color: #061A0F;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(0, 100, 45, 0.5),
+    0 6px 20px rgba(0, 229, 117, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.btn-emerald:hover {
+  background: linear-gradient(180deg, #38F596 0%, #15EB7E 50%, #00C863 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 8px 25px rgba(0, 229, 117, 0.55);
+}
+
+.btn-emerald:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 2px 8px rgba(0,229,117,0.3);
+}
+
+/* ─── 3D Text & Accents ────────────────────────────────── */
+.gold-text {
+  color: var(--primary);
+}
+
+.gold-glow-text {
+  color: var(--primary);
+  text-shadow: 0 0 20px rgba(255, 42, 95, 0.6), 0 0 40px rgba(0, 229, 117, 0.35);
+}
+
+.emerald-glow-text {
+  color: var(--accent);
+  text-shadow: 0 0 20px rgba(0, 229, 117, 0.6);
+}
+
+.cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+/* ─── Watermelon Gradient Text ─────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #FF2A5F 0%, #FF7A99 35%, #00E575 80%, #38F596 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 10px rgba(255, 42, 95, 0.3));
+}
+
+/* ─── Status Pill Indicator ───────────────────────────── */
+.status-pill-emerald {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background: rgba(0, 229, 117, 0.12);
+  border: 1px solid rgba(0, 229, 117, 0.35);
+  color: #00E575;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(0, 229, 117, 0.2);
+}
+
+.status-pill-ruby {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background: rgba(255, 42, 95, 0.12);
+  border: 1px solid rgba(255, 42, 95, 0.35);
+  color: #FF5280;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(255, 42, 95, 0.2);
+}
+
+.status-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 10px currentColor;
+  animation: pulse-ring 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+  100% { transform: scale(0.95); opacity: 1; }
+}
+
+
+/* ─── Input Styles ───────────────────────────────────── */
+.input-gold {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.input-gold:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.input-gold::placeholder {
+  color: var(--text-muted);
+}
+
+/* ─── Zodiac Drift Animation ─────────────────────────── */
+@keyframes zodiacDrift {
+  0% {
+    transform: translateY(100vh) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.zodiac-char {
+  position: absolute;
+  font-size: 1.5rem;
+  color: var(--primary);
+  opacity: 0;
+  animation: zodiacDrift linear infinite;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+/* ─── Typing Indicator Dots ──────────────────────────── */
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-8px); opacity: 1; }
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: typingBounce 1.4s infinite;
+  display: inline-block;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ─── Pulse Glow ─────────────────────────────────────── */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.7), 0 0 60px rgba(255, 215, 0, 0.3); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* ─── Spin Animation ─────────────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin { animation: spin 1s linear infinite; }
+
+/* ─── Skeleton Loading ───────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 215, 0, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* ─── Card 3D Flip ───────────────────────────────────── */
+.flip-card {
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Page Layout ────────────────────────────────────── */
+.page-with-sidebar {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* ─── Tab Styles ─────────────────────────────────────── */
+.tab-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.tab-btn.active {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.tab-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+/* ─── Auspicious Badge ───────────────────────────────── */
+.badge-auspicious {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.badge-inauspicious {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+}
+
+/* ─── Sidebar ────────────────────────────────────────── */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+}
+
+/* ─── Bottom Nav ─────────────────────────────────────── */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+}
+
+@media (max-width: 768px) {
+  .bottom-nav { display: flex; }
+}
+
+/* ─── Navbar ─────────────────────────────────────────── */
+.navbar {
+  height: 64px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(20px);
+}
+
+/* ─── Zodiac SVG Watermark ───────────────────────────── */
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.zodiac-watermark {
+  animation: slowRotate 120s linear infinite;
+  opacity: 0.04;
+}
+
+/* ─── Progress Bar ───────────────────────────────────── */
+.progress-ring {
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Chat Bubble ────────────────────────────────────── */
+.chat-bubble-user {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.15) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 18px 18px 4px 18px;
+}
+
+.chat-bubble-ai {
+  background: rgba(192, 132, 252, 0.1);
+  border: 1px solid rgba(192, 132, 252, 0.25);
+  border-radius: 18px 18px 18px 4px;
+}
+
+/* ─── Light Mode Overrides ───────────────────────────── */
+:root.light body {
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(184,134,11,0.05) 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 20%, rgba(124,58,237,0.04) 0%, transparent 50%);
+}
+
+:root.light .glass-card,
+:root.light .glass-card-hover {
+  background:
+    linear-gradient(135deg, rgba(255,248,220,0.85) 0%, rgba(255,243,199,0.65) 100%),
+    rgba(255,248,220,0.5);
+  border-color: rgba(184,134,11,0.25) rgba(184,134,11,0.15) rgba(184,134,11,0.10) rgba(184,134,11,0.20);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    inset 0 -1px 0 rgba(184,134,11,0.08),
+    0 4px 20px rgba(0,0,0,0.08);
+}
+
+:root.light .glass-card-hover:hover {
+  border-color: rgba(184,134,11,0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    0 0 20px rgba(184,134,11,0.2),
+    0 8px 24px rgba(0,0,0,0.1);
+}
+
+:root.light .input-gold {
+  background: rgba(255,255,255,0.7);
+  border-color: rgba(184,134,11,0.25);
+}
+
+:root.light .sidebar,
+:root.light .navbar,
+:root.light .bottom-nav {
+  background: rgba(255,248,220,0.95);
+  backdrop-filter: blur(20px);
+}
+
+/* ─── Number Animations ──────────────────────────────── */
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.5) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.count-up {
+  animation: countUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── Accordion ──────────────────────────────────────── */
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+/* ─── Planet Colors ──────────────────────────────────── */
+.planet-sun { color: #FFD700; border-color: rgba(255, 215, 0, 0.3); }
+.planet-moon { color: #C0C0C0; border-color: rgba(192, 192, 192, 0.3); }
+.planet-mars { color: #FF4444; border-color: rgba(255, 68, 68, 0.3); }
+.planet-mercury { color: #4ade80; border-color: rgba(74, 222, 128, 0.3); }
+.planet-jupiter { color: #FACC15; border-color: rgba(250, 204, 21, 0.3); }
+.planet-venus { color: #F5F5F5; border-color: rgba(245, 245, 245, 0.3); }
+.planet-saturn { color: #6366f1; border-color: rgba(99, 102, 241, 0.3); }
+.planet-rahu { color: #9CA3AF; border-color: rgba(156, 163, 175, 0.3); }
+.planet-ketu { color: #DC2626; border-color: rgba(220, 38, 38, 0.3); }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VedAstro UI/UX Improvements — Added 2026-10-28
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Enhanced Skeleton Shimmer (animated gold sweep) ────────────────────── */
+@keyframes skeletonShimmer {
+  0%   { background-position: -400% 0; }
+  100% { background-position:  400% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 215, 0, 0.12) 30%,
+    rgba(192, 132, 252, 0.10) 50%,
+    rgba(255, 215, 0, 0.12) 70%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 400% 100%;
+  animation: skeletonShimmer 2s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ─── Glass Card — enhanced inset shine ──────────────────────────────────── */
+.glass-card {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.02) 100%),
+    rgba(13, 13, 38, 0.62);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.14),
+    inset 0 -1px 0 rgba(0,0,0,0.25),
+    inset 1px 0 0 rgba(255,255,255,0.04),
+    0 6px 32px rgba(0,0,0,0.35),
+    0 1px 2px rgba(0,0,0,0.25);
+}
+
+/* ─── Cosmic Loader Spinner ──────────────────────────────────────────────── */
+@keyframes cosmicPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,215,0,0.3), 0 0 12px rgba(255,215,0,0.2); }
+  50%       { box-shadow: 0 0 0 6px rgba(255,215,0,0), 0 0 24px rgba(255,215,0,0.4); }
+}
+
+.cosmic-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255,215,0,0.15);
+  border-top-color: #FFD700;
+  border-right-color: #C084FC;
+  border-radius: 50%;
+  animation: spin 1s linear infinite, cosmicPulse 2s ease-in-out infinite;
+}
+
+/* ─── Focus Ring — accessibility ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(255, 215, 0, 0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── BottomNav — active pill morphing ───────────────────────────────────── */
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+  position: relative;
+  padding: 0.4rem 0;
+  font-size: 0.65rem;
+  background: none;
+  border: none;
+}
+
+.bottom-nav-item.active {
+  color: var(--primary);
+}
+
+.bottom-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+  animation: pillSlideIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pillSlideIn {
+  from { width: 0; opacity: 0; }
+  to   { width: 36px; opacity: 1; }
+}
+
+/* ─── Navbar Scroll Shadow (applied via JS) ──────────────────────────────── */
+.navbar {
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  will-change: background, box-shadow;
+}
+
+/* ─── Smooth Button Focus ────────────────────────────────────────────────── */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(255, 215, 0, 0.8);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ─── Input Focus Enhancement ────────────────────────────────────────────── */
+.input-gold:focus {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px rgba(255, 215, 0, 0.12),
+    0 0 12px rgba(255, 215, 0, 0.08);
+}
+
+/* ─── Mobile: prevent GlassCard tilt overflow ────────────────────────────── */
+@media (max-width: 768px) {
+  .glass-card {
+    /* Tilt effect can cause scroll on mobile — disable perspective */
+    transform: none !important;
+  }
+}
+
+/* ─── Toast Custom Style ─────────────────────────────────────────────────── */
+.go2072408551 {
+  background: rgba(15, 15, 40, 0.95) !important;
+  border: 1px solid rgba(255, 215, 0, 0.25) !important;
+  color: #E2E8F0 !important;
+  backdrop-filter: blur(16px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 16px rgba(255,215,0,0.1) !important;
+}
+
+/* ─── Accessibility: reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .zodiac-char,
+  .cosmic-spinner,
+  .skeleton,
+  .pulse-glow {
+    animation: none !important;
+  }
+}
+
+/* ─── High contrast mode support ────────────────────────────────────────── */
+@media (forced-colors: active) {
+  .glass-card {
+    border: 1px solid ButtonText;
+  }
+  .btn-gold {
+    background: ButtonText;
+    color: ButtonFace;
+    border: 1px solid ButtonText;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   WATERMELON UI OVERHAUL — v2.0.5 — Full physical 3D, non-AI aesthetics
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Override legacy gold references → watermelon ruby/emerald ─── */
+:root.dark .tab-btn.active,
+.tab-btn.active {
+  background: rgba(255,42,95,0.12);
+  border-color: rgba(255,42,95,0.45);
+  color: var(--primary);
+  box-shadow: 0 0 10px rgba(255,42,95,0.15);
+}
+
+/* Skeleton → ruby shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 0%,
+    rgba(255,42,95,0.10) 25%,
+    rgba(0,229,117,0.08) 50%,
+    rgba(255,42,95,0.10) 75%,
+    rgba(255,255,255,0.03) 100%
+  );
+  background-size: 400% 100%;
+  animation: skeletonShimmer 2.2s ease-in-out infinite;
+}
+
+/* Cosmic spinner → ruby+emerald dual ring */
+.cosmic-spinner {
+  border-color: rgba(255,42,95,0.15);
+  border-top-color: #FF2A5F;
+  border-right-color: #00E575;
+}
+
+/* Bottom nav → watermelon active state */
+.bottom-nav {
+  background: rgba(8,13,10,0.97);
+  border-top: 1px solid rgba(255,42,95,0.2);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.5), 0 -1px 0 rgba(0,229,117,0.08);
+}
+
+.bottom-nav-item.active::before {
+  background: linear-gradient(90deg, #FF2A5F, #00E575);
+  box-shadow: 0 0 12px rgba(255,42,95,0.6), 0 0 6px rgba(0,229,117,0.4);
+}
+
+/* Navbar → watermelon dark */
+.navbar {
+  background: rgba(8,13,10,0.92);
+  border-bottom: 1px solid rgba(255,42,95,0.15);
+  backdrop-filter: blur(24px) saturate(1.5);
+}
+
+/* Sidebar → watermelon glass */
+.sidebar {
+  background: linear-gradient(180deg, rgba(10,18,13,0.98) 0%, rgba(8,13,10,0.99) 100%);
+  border-right: 1px solid rgba(255,42,95,0.15);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+}
+
+/* Chat bubbles → watermelon */
+.chat-bubble-user {
+  background: linear-gradient(135deg, rgba(255,42,95,0.18) 0%, rgba(255,42,95,0.08) 100%);
+  border: 1px solid rgba(255,42,95,0.3);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 8px rgba(255,42,95,0.1);
+}
+
+.chat-bubble-ai {
+  background: linear-gradient(135deg, rgba(0,229,117,0.10) 0%, rgba(0,229,117,0.04) 100%);
+  border: 1px solid rgba(0,229,117,0.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 8px rgba(0,229,117,0.08);
+}
+
+/* Pulse glow → ruby */
+.pulse-glow {
+  animation: pulseGlowRuby 2.8s ease-in-out infinite;
+}
+
+@keyframes pulseGlowRuby {
+  0%, 100% {
+    box-shadow:
+      0 4px 0 #8B0020,
+      0 6px 20px rgba(255,42,95,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  50% {
+    box-shadow:
+      0 4px 0 #8B0020,
+      0 8px 36px rgba(255,42,95,0.7),
+      0 0 20px rgba(0,229,117,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+}
+
+/* Zodiac floating chars → ruby/emerald alternating */
+.zodiac-char {
+  color: var(--primary);
+  filter: drop-shadow(0 0 8px rgba(255,42,95,0.5));
+}
+
+.zodiac-char:nth-child(even) {
+  color: var(--accent);
+  filter: drop-shadow(0 0 8px rgba(0,229,117,0.5));
+}
+
+/* Auspicious badge → emerald */
+.badge-auspicious {
+  background: rgba(0,229,117,0.12);
+  color: #00E575;
+  border: 1px solid rgba(0,229,117,0.3);
+  box-shadow: 0 0 8px rgba(0,229,117,0.1);
+}
+
+/* Focus ring → watermelon */
+:focus-visible {
+  outline: 2px solid rgba(255,42,95,0.7);
+  outline-offset: 3px;
+}
+
+button:focus-visible, a:focus-visible {
+  outline: 2px solid rgba(255,42,95,0.7);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Input → emerald focus */
+.input-gold:focus {
+  border-color: rgba(0,229,117,0.55);
+  box-shadow: 0 0 0 3px rgba(0,229,117,0.12), 0 0 12px rgba(0,229,117,0.08);
+}
+
+/* Toast → watermelon */
+.go2072408551 {
+  background: rgba(8,13,10,0.97) !important;
+  border: 1px solid rgba(255,42,95,0.25) !important;
+  color: #F3FAF5 !important;
+  backdrop-filter: blur(20px) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 16px rgba(255,42,95,0.08) !important;
+}
+
+/* Planet colors — keep but add ruby for sun */
+.planet-sun { color: #FF6B9D; border-color: rgba(255,42,95,0.3); }
+
+/* Light mode glass cards → watermelon mist */
+:root.light .glass-card,
+:root.light .glass-card-hover {
+  background:
+    linear-gradient(135deg, rgba(255,240,244,0.88) 0%, rgba(240,255,248,0.75) 100%);
+  border-color: rgba(230,28,83,0.2) rgba(0,179,89,0.15) rgba(230,28,83,0.08) rgba(0,179,89,0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    inset 0 -1px 0 rgba(230,28,83,0.06),
+    0 4px 20px rgba(14,31,21,0.07);
+}
+
+:root.light .sidebar,
+:root.light .navbar,
+:root.light .bottom-nav {
+  background: rgba(248,252,250,0.98);
+  border-color: rgba(230,28,83,0.15);
+}
+
+/* 3D card bevel for light mode */
+:root.light .glass-card-hover:hover {
+  border-color: rgba(0,179,89,0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 0 20px rgba(230,28,83,0.12),
+    0 8px 24px rgba(14,31,21,0.08);
+}
+
+/* ─── Watermelon Rind Stripe (decorative header accent) ─── */
+.wm-stripe {
+  height: 3px;
+  background: linear-gradient(90deg, #FF2A5F 0%, #FF7A99 25%, #00E575 75%, #38F596 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255,42,95,0.4), 0 0 4px rgba(0,229,117,0.3);
+}
+
+/* ─── Physical Depth Divider ─── */
+.depth-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,42,95,0.35), rgba(0,229,117,0.25), transparent);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+}
+
